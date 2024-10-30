@@ -1,7 +1,7 @@
 import 'package:daelim_project/helpers/storage_helper.dart';
 import 'package:daelim_project/routes/app_screen.dart';
 import 'package:daelim_project/screens/login/login_screen.dart';
-import 'package:daelim_project/screens/main/main_screen.dart';
+import 'package:daelim_project/screens/users/users_screen.dart';
 import 'package:daelim_project/screens/setting/setting_screen.dart';
 import 'package:easy_extension/easy_extension.dart';
 import 'package:go_router/go_router.dart';
@@ -30,10 +30,10 @@ final appRouter = GoRouter(
     ),
     // NOTE: 메인 화면
     GoRoute(
-      path: AppScreen.main.toPath,
-      name: AppScreen.main.name,
+      path: AppScreen.users.toPath,
+      name: AppScreen.users.name,
       pageBuilder: (context, state) => const NoTransitionPage(
-        child: MainScreen(),
+        child: UsersScreen(),
       ),
     ),
     // NOTE: 설정 화면
