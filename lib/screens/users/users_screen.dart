@@ -90,6 +90,13 @@ class _UsersScreenState extends State<UsersScreen> {
           10.heightBox,
           //줄
           const Divider(),
+
+          if (_searchedDataList.isEmpty) Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(top:10),
+            child: const Text("검색 결과가 없습니다.", style: TextStyle(fontSize: 20)),
+          )
+          else 
           //유저 리스트뷰
           Expanded(
             // 리스트뷰는 expaned로 감싸야함
