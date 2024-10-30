@@ -78,10 +78,15 @@ class _SettingScreenState extends State<SettingScreen> {
     if (result == null) return;
 
     final imageFile = result.files.single;
-    final imageBytes = imageFile.bytes;
     final imageName = imageFile.name;
-    final imagePath = imageFile.path;
     final imageMime = lookupMimeType(imageName) ?? 'image/jpeg'; // image / peg
+    //
+    final imageBytes = imageFile.bytes;
+
+    if (imageBytes == null) {
+      final imagePath = imageFile.path;
+
+    }
 
     //mime 타입 자르기
     final mimeSplit = imageMime.split('/');
@@ -111,7 +116,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
       // MIME type 자르기!!
       ..files.add(
-        await http.MultipartFile.fromPath(
+        await http.MultipartFile.(
           'image',
           imagePath,
           contentType: MediaType(mimeType, mimeSubtype),
