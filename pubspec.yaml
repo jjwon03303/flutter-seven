@@ -25,6 +25,7 @@ dependencies:
   http_parser:
   shared_preferences: ^2.3.2
   mime: ^2.0.0
+  lucide_icons_flutter: ^1.2.3
 
 dev_dependencies:
   flutter_test:

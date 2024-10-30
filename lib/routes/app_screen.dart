@@ -17,7 +17,7 @@ extension AppScreenExtension on AppScreen {
   IconData get getIcon {
     switch (this) {
       case AppScreen.main:
-        return Icons.home;
+        return Icons.group;
       case AppScreen.setting:
         return Icons.settings;
       default:
