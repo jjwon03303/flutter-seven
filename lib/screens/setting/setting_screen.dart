@@ -81,7 +81,7 @@ class _SettingScreenState extends State<SettingScreen> {
     final imageBytes = imageFile.bytes;
     final imageName = imageFile.name;
     final imagePath = imageFile.path;
-    final imageMime = lookupMimeType(imageName) ?? 'image/jpeg'; // image / jpeg
+    final imageMime = lookupMimeType(imageName) ?? 'image/jpeg'; // image / peg
 
     //mime 타입 자르기
     final mimeSplit = imageMime.split('/');
@@ -114,17 +114,16 @@ class _SettingScreenState extends State<SettingScreen> {
         await http.MultipartFile.fromPath(
           'image',
           imagePath,
-          // contentType: MediaType(),
+          contentType: MediaType(mimeType, mimeSubtype),
         ),
       );
 
-    Log.green('이미지 업로드');
-
     final response = await uploadRequest.send();
+    final uploadResult = await http.Response.fromStream(response);
 
     Log.green('이미지 업로드 결과: ${response.statusCode}');
 
-    if (response.statusCode != 200) return;
+    if (uploadResult.statusCode != 200) return;
 
     _fetchUserData();
 
