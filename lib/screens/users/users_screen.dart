@@ -1,14 +1,54 @@
 import 'package:daelim_project/common/scaffold/app_scaffold.dart';
+import 'package:daelim_project/models/user_data.dart';
 import 'package:daelim_project/routes/app_screen.dart';
 import 'package:easy_extension/easy_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class UsersScreen extends StatelessWidget {
+class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
 
+  @override
+  State<UsersScreen> createState() => _UsersScreenState();
+}
+
+class _UsersScreenState extends State<UsersScreen> {
+  final List<UserData> _dummyDataList = List.generate(20, (i) {
+    //tood
+    final index = i + 1;
+    return UserData(
+      id: "$index",
+      name: name,
+      email: email,
+      student_number: student_number,
+      profileImageUrl: profileImageUrl,
+    );
+  });
+  List<UserData> _searchedDataList = [];
+
+  @override
+  void initState() {
+    //
+    _searchedDataList = _dummyDataList;
+  }
+
+  final _defaultInputBorder = const OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Color(0xFFE4E4E7),
+    ),
+    borderRadius: BorderRadius.all(
+      Radius.circular(10),
+    ),
+  );
+
   void _onSearch(String value) {
-    //todo
+    final cachedDataList = List.from(_dummyDataList);
+
+    setState(
+      () {
+        _searchedDataList = _dummyDataList.where((e) => e.name.toLowerCase()),
+      },
+    );
   }
 
   @override
@@ -18,6 +58,10 @@ class UsersScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(),
+          ),
           // 유저 목록 타이틀
           const Text(
             "유저 목록",
@@ -31,14 +75,14 @@ class UsersScreen extends StatelessWidget {
           //검색 바
           TextField(
             onChanged: _onSearch,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               filled: false,
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Color(0xFFE4E4E7),
-                ),
-              ),
-              prefixIcon: Icon(LucideIcons.search),
+              enabledBorder: _defaultInputBorder,
+              focusedBorder: _defaultInputBorder.copyWith(
+                  borderSide: const BorderSide(
+                color: Colors.black,
+              )),
+              prefixIcon: const Icon(LucideIcons.search),
               hintText: "유저 검색...",
             ),
           ),
@@ -47,6 +91,31 @@ class UsersScreen extends StatelessWidget {
           //줄
           const Divider(),
           //유저 리스트뷰
+          Expanded(
+            // 리스트뷰는 expaned로 감싸야함
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: _dummyDataList.length,
+              itemBuilder: (context, index) {
+                final dummy = _dummyDataList[index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: const Color(0xFFEAEAEA),
+                    foregroundImage: NetworkImage(
+                      dummy.profileImageUrl,
+                    ),
+                  ),
+                  title: Text(
+                    dummy.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text(dummy.student_number),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
