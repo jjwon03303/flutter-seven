@@ -9,6 +9,9 @@ import 'package:easy_extension/easy_extension.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+// ignore: unused_import
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -76,9 +79,20 @@ class _SettingScreenState extends State<SettingScreen> {
 
     final imageFile = result.files.single;
     final imageBytes = imageFile.bytes;
+    final imageName = imageFile.name;
     final imagePath = imageFile.path;
+    final imageMime = lookupMimeType(imageName) ?? 'image/jpeg'; // image / jpeg
 
-    Log.green('이미지 경로: $imagePath / 이미지 바이트: ${imageBytes?.length}');
+    //mime 타입 자르기
+    final mimeSplit = imageMime.split('/');
+    final mimeType = mimeSplit.first;
+    final mimeSubtype = mimeSplit.last;
+
+    Log.green(
+        '이미지 경로: $imagePath / 이미지 바이트: ${imageBytes?.length} / 이미지 이름 : $imageName');
+
+    // ignore: unnecessary_brace_in_string_interps
+    Log.green('타입들 = ${mimeType} - ${mimeSubtype}');
 
     if (imagePath == null) return;
 
@@ -94,11 +108,13 @@ class _SettingScreenState extends State<SettingScreen> {
           HttpHeaders.authorizationHeader: '$tokenType $token',
         },
       )
+
+      // MIME type 자르기!!
       ..files.add(
         await http.MultipartFile.fromPath(
           'image',
           imagePath,
-          // contentType: http.MediaType(),
+          // contentType: MediaType(),
         ),
       );
 
